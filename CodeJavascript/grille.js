@@ -2,14 +2,14 @@ var canvas  = document.getElementById("canvas");
 var grille = canvas.getContext('2d');
 var tX = canvas.getAttribute('width');
 var tY = canvas.getAttribute('height');
-var tabPions = [[false, false, false, false, false, false, false, false], 
-				  [false, false, false, false, false, false, false, false], 
-				  [false, false, false, false, false, false, false, false], 
-				  [false, false, false, false, false, false, false, false], 
-				  [false, false, false, false, false, false, false, false],
-				  [false, false, false, false, false, false, false, false], 
-				  [false, false, false, false, false, false, false, false],
-				  [false, false, false, false, false, false, false, false]];
+var tabPions = [[0, 0, 0, 0, 0, 0, 0, 0], 
+				  [0, 0, 0, 0, 0, 0, 0, 0], 
+				  [0, 0, 0, 0, 0, 0, 0, 0], 
+				  [0, 0, 0, 1, 2, 0, 0, 0], 
+				  [0, 0, 0, 2, 1, 0, 0, 0], 
+                  [0, 0, 0, 0, 0, 0, 0, 0], 
+                  [0, 0, 0, 0, 0, 0, 0, 0], 
+				  [0, 0, 0, 0, 0, 0, 0, 0]];
 var c = 400/8;
 
 var texp = [];
@@ -70,7 +70,7 @@ function dessinePionO(x,y) {
 	grille.fill();
 }
 
-function tourOrdi(){
+/*function tourOrdi(){
     var nbex = 0;
     for(var py = 0; py < 9; py++) {               				// on parcoure le tableau de jeu
         for(var px = 0; px < 9; px++) {           				// et on examine chaque case dans
@@ -195,7 +195,7 @@ function tourOrdi(){
             }
         }
     }
-}
+}*/
 
 function game() {
 	dessineG();
@@ -256,7 +256,7 @@ $("#canvas").click(function(e){
 		cercleY = 17*c/2; row = 8; }
 	
 	if(!tabPions[col][row]) {
-		tabPions[col][row] = true;
+		tabPions[col][row] = 2;
 		dessinePionU(cercleX,cercleY);
 	}
 	
