@@ -12,8 +12,7 @@ var tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
 				  [0, 0, 0, 0, 0, 0, 0, 0]];
 var c = 400/8;
 
-var texp = [];
-var tjeu = [];
+var tabExplo = [];
 
 function dessineG(){
 	grille.fillStyle = "rgb(0,128,0)";
@@ -47,132 +46,134 @@ function dessinePionO(x,y) {
 	grille.fill();
 }
 
-/*function tourOrdi(){
-    var nbex = 0;
-    for(var py = 0; py < 9; py++) {               				// on parcoure le tableau de jeu
-        for(var px = 0; px < 9; px++) {           				// et on examine chaque case dans
-            if(tabPions[py][px] == false) {       				// les huit directions si la case
-                if(tjeu[py][px+1] == 1) { 				// est vide, bien entendu
-                    x = px + 1
-                    n = 0
-                    while(tjeu[py][x] == 1) { 			// tant qu'il y a des pions adverses
-                        n += 1              			// nombre de pions
-                        x += 1
-                    }			              			// on avance d'une case
-                    if(n > 0 and tjeu[py][x] == 2) {		// pion ordi = limite
-					        nbex += 1
-					        tp = (0,n,tval[py][px],px,py)
-                        	texp.append(tp)
-					}
-				}   									// on renseigne la table d'évaluation : // sens, nbre de pions, valeur de la case, 
-														// et position de départ
-                        
-                if(tjeu[py+1][px+1] == 1) {
-                    x = px + 1
-                    y = py + 1
-                    n = 0
-                    while(tjeu[y][x] == 1) {
-                        n += 1
-                        x += 1
-                        y += 1
+function dessinePionT(x,y) {
+    grille.fillStyle = "rgba(255,0,0,0.6)";
+    grille.beginPath();
+    grille.arc(x, y, (c/2)-8, 0, 2*Math.PI, true);
+    grille.fill();
+}
+
+function exploration(){
+    tabExplo = [];
+    var x=0;
+    var y=0;
+    var tp = [];
+    for(let py = 0; py < 8; py++) {                             // on parcoure le tableau de jeu
+        for(let px = 0; px < 8; px++) {                         // et on examine chaque case dans
+            if(tabPions[py][px] === 0) {                    // les huit directions si la case
+                if((px+1 < 8) && (tabPions[py][px+1] === 1)) {              // est vide, bien entendu
+                    x = px + 1;
+                    while(tabPions[py][x] === 1) {          // tant qu'il y a des pions adverses
+                        x  ++;
+                    }                                   // on avance d'une case
+                    if(tabPions[py][x] === 2) {        // pion ordi = limite
+                        tp = [px,py];
+                        tabExplo.push(tp);
                     }
-                    if(n > 0 and tjeu[y][x] == 2) {
-                        nbex += 1
-                        tp = (1,n,tval[py][px],px,py)
-                        texp.append(tp)
+                }                                       // on renseigne la table d'évaluation : // sens, nbre de pions, valeur de la case,
+                                                        // et position de départ
+
+                if((py+1 < 8) && (px+1 < 8) && (tabPions[py+1][px+1] === 1)) {
+                    x = px + 1;
+                    y = py + 1;
+                    while(tabPions[y][x] === 1) {
+                        x ++;
+                        y ++;
+                    }
+                    if(tabPions[y][x] === 2) {
+                        tp = [px,py];
+                        tabExplo.push(tp);
                     }
                 }
 
-                if(tjeu[py+1][px] == 1) {
-                    y = py + 1
-                    n = 0
-                    while(tjeu[y][px] == 1) {
-                        n += 1
-                        y += 1
+                if((py+1 < 8) && (tabPions[py+1][px] === 1)) {
+                    y = py + 1;
+                    while(tabPions[y][px] === 1) {
+                        y ++;
                     }
-                    if(n > 0 and tjeu[y][px] == 2) {
-                        nbex += 1
-                        tp = (2,n,tval[py][px],px,py)
-                        texp.append(tp)
-                    }
-                }        
-
-                if(tjeu[py+1][px-1] == 1) {
-                    x = px - 1
-                    y = py + 1
-                    n = 0
-                    while(tjeu[y][x] == 1) {
-                        n += 1
-                        x -= 1
-                        y += 1
-                    }
-                    if(n > 0 and tjeu[y][x] == 2) {
-                        nbex += 1
-                        tp = (3,n,tval[py][px],px,py)
-                        texp.append(tp)
+                    if(tabPions[y][px] === 2) {
+                        tp = [px,py];
+                        tabExplo.push(tp);
                     }
                 }
 
-                if(tjeu[py][px-1] == 1) {
-                    x = px - 1
-                    n = 0
-                    while(tjeu[py][x] == 1) {
-                        n += 1
-                        x -= 1
+                if((py+1 < 8) && (px-1 >= 0) && (tabPions[py+1][px-1] === 1)) {
+                    x = px - 1;
+                    y = py + 1;
+                    while(tabPions[y][x] === 1) {
+                        x --;
+                        y ++;
                     }
-                    if(n > 0 and tjeu[py][x] == 2) {
-                        nbex += 1
-                        tp = (4,n,tval[py][px],px,py)
-                        texp.append(tp)
-                    }
-                }
-                if(tjeu[py-1][px-1] == 1) {
-                    x = px - 1
-                    y = py - 1
-                    n = 0
-                    while(tjeu[y][x] == 1) {
-                        n += 1
-                        x -= 1
-                        y -= 1
-                    }
-                    if(n > 0 and tjeu[y][x] == 2) {
-                        nbex += 1
-                        tp = (5,n,tval[py][px],px,py)
-                        texp.append(tp)
+                    if(tabPions[y][x] === 2) {
+                        tp = [px,py];
+                        tabExplo.push(tp);
                     }
                 }
-                if(tjeu[py-1][px] == 1) {
-                    y = py - 1
-                    n = 0
-                    while(tjeu[y][px] == 1) { 
-                        n += 1
-                        y -= 1
+
+                if((px-1 >= 0) && (tabPions[py][px-1] === 1)) {
+                    x = px - 1;
+                    while(tabPions[py][x] === 1) {
+                        x --;
                     }
-                    if(n > 0 and tjeu[y][px] == 2) {
-                        nbex += 1
-                        tp = (6,n,tval[py][px],px,py)
-                        texp.append(tp)
+                    if(tabPions[py][x] === 2) {
+                        tp = [px,py];
+                        tabExplo.push(tp);
                     }
                 }
-                if(tjeu[py-1][px+1] == 1) {
-                    x = px + 1
-                    y = py - 1
-                    n = 0
-                    while(tjeu[y][x] == 1) {
-                        n += 1
-                        x += 1
-                        y -= 1
+
+                if((py-1 >= 0) && (px-1 >= 0) && (tabPions[py-1][px-1] === 1)) {
+                    x = px - 1;
+                    y = py - 1;
+                    while(tabPions[y][x] === 1) {
+                        x --;
+                        y --;
                     }
-                    if(n > 0 and tjeu[y][x] == 2) {
-                        nbex += 1
-                        tp = (7,n,tval[py][px],px,py)
-                        texp.append(tp)
+                    if(tabPions[y][x] === 2) {
+                        tp = [px,py];
+                        tabExplo.push(tp);
+                    }
+                }
+
+                if((py-1 >= 0) && (tabPions[py-1][px] === 1)) {
+                    y = py - 1;
+                    while(tabPions[y][px] === 1) {
+                        y --;
+                    }
+                    if(tabPions[y][px] === 2) {
+                        tp = [px,py];
+                        tabExplo.push(tp);
+                    }
+                }
+
+                if((py-1 >= 0) && (px+1 < 8) && (tabPions[py-1][px+1] === 1)) {
+                    x = px + 1;
+                    y = py - 1;
+                    while(tabPions[y][x] === 1) {
+                        x ++;
+                        y --;
+                    }
+                    if(tabPions[y][x] === 2) {
+                        tp = [px,py];
+                        tabExplo.push(tp);
                     }
                 }
             }
         }
     }
-}*/
+}
+
+function highlight(){
+    exploration();
+    for (var i=0;i<tabExplo.length;i++) {
+        grille.fillStyle = "rgb(234,246,13)";
+        //grille.fillRect(tabExplo[i][0] * 50+25, tabExplo[i][1] * 50+25, (tabExplo[i][0] + 1) * 50, (tabExplo[i + 1][1] + 1) * 50);
+        grille.beginPath();
+        grille.arc(tabExplo[i][0] * 50+25, tabExplo[i][1] * 50+25, (c/2)-20, 0, 2*Math.PI, true);
+        grille.fill();
+    }
+}
+
+
 
 function game() {
 	dessineG();
@@ -180,8 +181,8 @@ function game() {
 	dessinePionU(225,175);
 	dessinePionO(175,175);
 	dessinePionO(225,225);
+	highlight();
 }
-
 
 game();
 
@@ -231,8 +232,8 @@ $("#canvas").click(function(e){
 		cercleY = 15*(c/2); row = 7; }
 	else { 
 		cercleY = 17*c/2; row = 8; }
-	
-	if(!tabPions[col][row]) {
+	exploration();
+	if(tabExplo.includes([col,row])) {
 		tabPions[col][row] = 2;
 		dessinePionU(cercleX,cercleY);
 	}
