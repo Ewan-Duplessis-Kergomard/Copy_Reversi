@@ -21,37 +21,14 @@ function dessineG(){
 	grille.strokeStyle="#000000";
 	grille.lineWidth = 4;
 	grille.beginPath();
-	grille.moveTo(c, 0);
-	grille.lineTo(c, 400);
-	grille.moveTo(2*c, 0);
-	grille.lineTo(2*c, 400);
-	grille.moveTo(3*c, 0);
-	grille.lineTo(3*c, 400);
-	grille.moveTo(4*c, 0);
-	grille.lineTo(4*c, 400);
-	grille.moveTo(5*c, 0);
-	grille.lineTo(5*c, 400);
-	grille.moveTo(6*c, 0);
-	grille.lineTo(6*c, 400);
-	grille.moveTo(7*c, 0);
-	grille.lineTo(7*c, 400);
 
-	grille.moveTo(400, c);
-	grille.lineTo(c-45, c);
-	grille.moveTo(0, 2*c);
-	grille.lineTo(400, 2*c);
-	grille.moveTo(0, c);
-	grille.lineTo(c-45, c);
-	grille.moveTo(0, 3*c);
-	grille.lineTo(400, 3*c);
-	grille.moveTo(0, 4*c);
-	grille.lineTo(400, 4*c);
-	grille.moveTo(0, 5*c);
-	grille.lineTo(400, 5*c);
-	grille.moveTo(0, 6*c);
-	grille.lineTo(400, 6*c);
-	grille.moveTo(0, 7*c);
-	grille.lineTo(400, 7*c);
+    for (let n = 1; n < 8; n++) {
+        grille.moveTo(n*c, 0);
+        grille.lineTo(n*c, 400);
+        grille.moveTo(400, n*c);
+        grille.lineTo(c-45, n*c);
+
+    }
 	grille.stroke();
 }
 
@@ -215,7 +192,7 @@ $("#canvas").click(function(e){
 	var cercleX = 0;
 	var cercleY = 0;
 	var col = 0;
-	var row = 0; 
+	var row = 0;
 	
 	if(x < c) { 
 		cercleX = c/2; col = 0; }
