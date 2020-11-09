@@ -57,10 +57,132 @@ function dessinePion(){
     }
 }
 
+function changerCouleur(px, py, actif, autre){
+        if(tabPions[px+1][py] === autre){
+            let x = px+1;
+            while (tabPions[x][py] === autre){
+                x++;
+            }
+            if(tabPions[x][py] === actif){
+                x--;
+                while(x !== px){
+                    tabPions[x][py] = autre;
+                    x--;
+                }
+            }
+        }
+        if(tabPions[px+1][py+1] === autre){
+            let x = px+1;
+            let y = py+1;
+            while (tabPions[x][y] === autre){
+                x++;
+                y++;
+            }
+            if(tabPions[x][y] === actif){
+                x--;
+                y--;
+                while((x !== px) || (y !== py)){
+                    tabPions[x][y] = autre;
+                    x--;
+                    y--;
+                }
+            }
+        }
+        if(tabPions[px][py+1] === autre){
+            let y = py+1;
+            while (tabPions[px][y] === autre){
+                y++;
+            }
+            if(tabPions[px][y] === actif){
+                y--;
+                while(y !== py){
+                    tabPions[px][y] = autre;
+                    y--;
+                }
+            }
+        }
+        if(tabPions[px-1][py+1] === autre){
+            let y = py+1;
+            let x = px-1;
+            while (tabPions[x][y] === autre){
+                x--;
+                y++;
+            }
+            if(tabPions[x][y] === actif){
+                x++;
+                y--;
+                while((y !== py)||(x!==px)){
+                    tabPions[x][y] = autre;
+                    y--;
+                    x++;
+                }
+            }
+        }
+        if(tabPions[px-1][py] === autre) {
+            let x = px - 1;
+            while (tabPions[x][py] === autre) {
+                x--;
+            }
+            if (tabPions[x][py] === actif) {
+                x++;
+                while (x !== px) {
+                    tabPions[x][py] = autre;
+                    x++;
+                }
+            }
+        }
+        if(tabPions[px-1][py-1] === autre) {
+            let x = px - 1;
+            let y = py - 1;
+            while (tabPions[x][y] === autre) {
+                x--;
+                y--;
+            }
+            if (tabPions[x][y] === actif) {
+                x++;
+                y++;
+                while ((y!==py)||(x !== px)) {
+                    tabPions[x][y] = autre;
+                    x++;
+                    y++;
+                }
+            }
+        }
+        if(tabPions[px][py-1] === autre) {
+            let y = py - 1;
+            while (tabPions[px][y] === autre) {
+                y--;
+            }
+            if (tabPions[px][y] === actif) {
+                y++;
+                while (y !== py) {
+                    tabPions[px][y] = autre;
+                    y++;
+                }
+            }
+        }
+        if(tabPions[px+1][py-1] === autre) {
+            let x = px - 1;
+            let y = py - 1;
+            while (tabPions[x][y] === autre) {
+                y--;
+                x++;
+            }
+            if (tabPions[x][y] === actif) {
+                y++;
+                x--;
+                while ((y!==py)||(x !== px)) {
+                    tabPions[px][y] = autre;
+                    y++;
+                }
+            }
+        }
+    dessinePion();
+}
+
 function exploration(actif, autre){
     tabExplo = [];
-    let y=0;
-    let x=0;
+    let y, x=0;
     let coupJouable = [];
     for(let px = 0; px < 8; px++) {                             // on parcoure le tableau de jeu
         for(let py = 0; py < 8; py++) {                         // et on examine chaque case dans
@@ -179,6 +301,7 @@ function tourOrdi() {
     let y = tabExplo[random][1];
     tabPions[x][y] = 1;
     dessinePion();
+    changerCouleur();
 }
 
 function game() {
@@ -237,7 +360,8 @@ $("#canvas").click(function(e){
             dessinePion();
         }
     }
-    setTimeout(fonctionAExecuter, 2000);
+    changerCouleur(col,row,2,1);
+    //setTimeout(fonctionAExecuter, 2000);
     tourOrdi();
     exploration(2,1);
     highlight(2,1);
