@@ -33,13 +33,13 @@ function dessineG(){                                //fonction qui trace le plat
 }
 
 function dessinePion(){
-    for(let px = 0; px < 8; px++) {                             // on parcoure le tableau de jeu
-        for (let py = 0; py < 8; py++) {
+    for (let py = 0; py < 8; py++) {
+        for(let px = 0; px < 8; px++) {                             // on parcoure le tableau de jeu
             if (tabPions[px][py] === 0){
-                /*grille.fillStyle = "rgb(0,128,0)";
+                grille.fillStyle = "rgb(0,128,0)";
                 grille.beginPath();
                 grille.arc(px*50+25, py*50+25, (c/2)-8, 0, 2*Math.PI, true);
-                grille.fill();*/
+                grille.fill();
             }
             if(tabPions[px][py] === 1){
                 grille.fillStyle = "#FFFFFF";
@@ -57,68 +57,68 @@ function dessinePion(){
     }
 }
 
-function changerCouleur(px, py, actif, autre){
-        if(tabPions[px+1][py] === autre){
-            let x = px+1;
-            while (tabPions[x][py] === autre){
+function changerCouleur(px, py, actif, autre) {
+        if (tabPions[px + 1][py] === autre) {
+            let x = px + 1;
+            while (tabPions[x][py] === autre) {
                 x++;
             }
-            if(tabPions[x][py] === actif){
+            if (tabPions[x][py] === actif) {
                 x--;
-                while(x !== px){
-                    tabPions[x][py] = autre;
+                while (x !== px) {
+                    tabPions[x][py] = actif;
                     x--;
                 }
             }
         }
-        if(tabPions[px+1][py+1] === autre){
-            let x = px+1;
-            let y = py+1;
-            while (tabPions[x][y] === autre){
+        if (tabPions[px + 1][py + 1] === autre) {
+            let x = px + 1;
+            let y = py + 1;
+            while (tabPions[x][y] === autre) {
                 x++;
                 y++;
             }
-            if(tabPions[x][y] === actif){
+            if (tabPions[x][y] === actif) {
                 x--;
                 y--;
-                while((x !== px) || (y !== py)){
-                    tabPions[x][y] = autre;
+                while ((x !== px) || (y !== py)) {
+                    tabPions[x][y] = actif;
                     x--;
                     y--;
                 }
             }
         }
-        if(tabPions[px][py+1] === autre){
-            let y = py+1;
-            while (tabPions[px][y] === autre){
+        if (tabPions[px][py + 1] === autre) {
+            let y = py + 1;
+            while (tabPions[px][y] === autre) {
                 y++;
             }
-            if(tabPions[px][y] === actif){
+            if (tabPions[px][y] === actif) {
                 y--;
-                while(y !== py){
-                    tabPions[px][y] = autre;
+                while (y !== py) {
+                    tabPions[px][y] = actif;
                     y--;
                 }
             }
         }
-        if(tabPions[px-1][py+1] === autre){
-            let y = py+1;
-            let x = px-1;
-            while (tabPions[x][y] === autre){
+        if (tabPions[px - 1][py + 1] === autre) {
+            let y = py + 1;
+            let x = px - 1;
+            while (tabPions[x][y] === autre) {
                 x--;
                 y++;
             }
-            if(tabPions[x][y] === actif){
+            if (tabPions[x][y] === actif) {
                 x++;
                 y--;
-                while((y !== py)||(x!==px)){
-                    tabPions[x][y] = autre;
+                while ((y !== py) || (x !== px)) {
+                    tabPions[x][y] = actif;
                     y--;
                     x++;
                 }
             }
         }
-        if(tabPions[px-1][py] === autre) {
+        if (tabPions[px - 1][py] === autre) {
             let x = px - 1;
             while (tabPions[x][py] === autre) {
                 x--;
@@ -126,12 +126,12 @@ function changerCouleur(px, py, actif, autre){
             if (tabPions[x][py] === actif) {
                 x++;
                 while (x !== px) {
-                    tabPions[x][py] = autre;
+                    tabPions[x][py] = actif;
                     x++;
                 }
             }
         }
-        if(tabPions[px-1][py-1] === autre) {
+        if (tabPions[px - 1][py - 1] === autre) {
             let x = px - 1;
             let y = py - 1;
             while (tabPions[x][y] === autre) {
@@ -141,14 +141,14 @@ function changerCouleur(px, py, actif, autre){
             if (tabPions[x][y] === actif) {
                 x++;
                 y++;
-                while ((y!==py)||(x !== px)) {
-                    tabPions[x][y] = autre;
+                while ((y !== py) || (x !== px)) {
+                    tabPions[x][y] = actif;
                     x++;
                     y++;
                 }
             }
         }
-        if(tabPions[px][py-1] === autre) {
+        if (tabPions[px][py - 1] === autre) {
             let y = py - 1;
             while (tabPions[px][y] === autre) {
                 y--;
@@ -156,12 +156,12 @@ function changerCouleur(px, py, actif, autre){
             if (tabPions[px][y] === actif) {
                 y++;
                 while (y !== py) {
-                    tabPions[px][y] = autre;
+                    tabPions[px][y] = actif;
                     y++;
                 }
             }
         }
-        if(tabPions[px+1][py-1] === autre) {
+        if (tabPions[px + 1][py - 1] === autre) {
             let x = px - 1;
             let y = py - 1;
             while (tabPions[x][y] === autre) {
@@ -171,32 +171,32 @@ function changerCouleur(px, py, actif, autre){
             if (tabPions[x][y] === actif) {
                 y++;
                 x--;
-                while ((y!==py)||(x !== px)) {
-                    tabPions[px][y] = autre;
+                while ((y !== py) || (x !== px)) {
+                    tabPions[px][y] = actif;
                     y++;
                 }
             }
         }
-    dessinePion();
+        dessinePion();
 }
 
 function exploration(actif, autre){
     tabExplo = [];
     let y, x=0;
     let coupJouable = [];
-    for(let px = 0; px < 8; px++) {                             // on parcoure le tableau de jeu
-        for(let py = 0; py < 8; py++) {                         // et on examine chaque case dans
-            if(tabPions[px][py] === 0) {                        // les huit directions si la case
-                if((py+1 < 8) && (tabPions[px][py+1] === autre)) {              // est vide, bien entendu
+    for(let px = 0; px < 8; px++) {                                     // on parcoure le tableau de jeu
+        for(let py = 0; py < 8; py++) {                                 // et on examine chaque case dans
+            if(tabPions[px][py] === 0) {                                // les huit directions si la case
+                if((py+1 < 8) && (tabPions[px][py+1] === autre)) {      // est vide, bien entendu
                     y = py + 1;
-                    while(tabPions[px][y] === autre) {          // tant qu'il y a des pions adverses
+                    while(tabPions[px][y] === autre) {                  // tant qu'il y a des pions adverses
                         y++;
-                    }                                   // on avance d'une case
-                    if(tabPions[px][y] === actif) {        // pion ordi = limite
-                        coupJouable = [py,px];
+                    }                                                   // on avance d'une case
+                    if(tabPions[px][y] === actif) {                     // pion ordi = limite
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
-                }                                       // on renseigne la table d'évaluation
+                }                                                       // on renseigne la table d'évaluation
                 if((px+1 < 8) && (py+1 < 8) && (tabPions[px+1][py+1] === autre)) {
                     y = py + 1;
                     x = px + 1;
@@ -205,7 +205,7 @@ function exploration(actif, autre){
                         x++;
                     }
                     if(tabPions[x][y] === actif) {
-                        coupJouable = [py,px];
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
                 }
@@ -215,7 +215,7 @@ function exploration(actif, autre){
                         x++;
                     }
                     if(tabPions[x][py] === 2) {
-                        coupJouable = [py,px];
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
                 }
@@ -227,7 +227,7 @@ function exploration(actif, autre){
                         x++;
                     }
                     if(tabPions[x][y] === actif) {
-                        coupJouable = [py,px];
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
                 }
@@ -237,7 +237,7 @@ function exploration(actif, autre){
                         y--;
                     }
                     if(tabPions[px][y] === actif) {
-                        coupJouable = [py,px];
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
                 }
@@ -249,7 +249,7 @@ function exploration(actif, autre){
                         x--;
                     }
                     if(tabPions[x][y] === actif) {
-                        coupJouable = [py,px];
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
                 }
@@ -259,7 +259,7 @@ function exploration(actif, autre){
                         x--;
                     }
                     if(tabPions[x][py] === actif) {
-                        coupJouable = [py,px];
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
                 }
@@ -271,7 +271,7 @@ function exploration(actif, autre){
                         x--;
                     }
                     if(tabPions[x][y] === actif) {
-                        coupJouable = [py,px];
+                        coupJouable = [px,py];
                         tabExplo.push(coupJouable);
                     }
                 }
@@ -301,7 +301,7 @@ function tourOrdi() {
     let y = tabExplo[random][1];
     tabPions[x][y] = 1;
     dessinePion();
-    changerCouleur();
+    changerCouleur(x,y,1,2);
 }
 
 function game() {
@@ -355,7 +355,7 @@ $("#canvas").click(function(e){
         row = 8; }
     exploration(2,1);
     for(let i = 0; i < tabExplo.length; i++) {
-        if((tabExplo[i][0] === row) && (tabExplo[i][1] === col)) {
+        if((tabExplo[i][0] === col) && (tabExplo[i][1] === row)) {
             tabPions[col][row] = 2;
             dessinePion();
         }
