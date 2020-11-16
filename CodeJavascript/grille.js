@@ -206,9 +206,6 @@ $("#canvas").click(function(e){
 
         }
     }
-    //mainChangeCoul(2,1);
     //setTimeout(fonctionAExecuter, 2000);
 
 });
-
-
