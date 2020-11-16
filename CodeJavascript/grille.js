@@ -13,6 +13,7 @@ var tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
 const largeurGrille = 400;
 const c = largeurGrille/8;
 let col, row;
+let compteN,compteB;
 
 var tabExplo = [];
 
@@ -151,6 +152,21 @@ function game() {
     dessinePion();
 }
 
+function comptePions(){
+    compteB=0;
+    compteN=0;
+    for (let j=0;j<8;j++){
+        for(let i=0;i<8;i++){
+            if(tabPions[j][i]===1){
+                compteB+=1;
+            }
+            if(tabPions[j][i]===2){
+                compteN+=1;
+            }
+        }
+    }
+}
+
 
 game();
 highlight(2,1);
@@ -201,7 +217,9 @@ $("#canvas").click(function(e){
             tabPions[row][col] = 2;
             mainChangeCoul(2,1);
             dessinePion();
+            comptePions();
             tourOrdi();
+            comptePions();
             highlight(2,1);
 
         }
