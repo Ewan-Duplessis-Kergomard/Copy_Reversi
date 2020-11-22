@@ -2,20 +2,21 @@ const canvas  = document.getElementById("canvas");
 const grille = canvas.getContext('2d');
 const tX = canvas.getAttribute('width');
 const tY = canvas.getAttribute('height');
-var tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0]];
+let tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 2, 0, 0, 0],
+                [0, 0, 0, 2, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0]];
 const largeurGrille = 400;
 const c = largeurGrille/8;
 let col, row;
-let compteN,compteB;
+let compteN,compteB,pionVide;
 
-var tabExplo = [];
+
+let tabExplo = [];
 
 function dessineG(){                                //fonction qui trace le plateau
     grille.fillStyle = "rgb(0,128,0)";
@@ -61,28 +62,25 @@ function dessinePion(){
 
 
 function exploration(coox,cooy,modx,mody,actif,autre,n){
-    if((tabPions[cooy][coox]===0 || (n!=1 &&tabPions[cooy][coox]===autre) ) && (coox+modx>-1 && coox+modx<8) && (cooy+mody>-1 && cooy+mody<8) && tabPions[cooy+mody][coox+modx]===autre){
+    if((tabPions[cooy][coox]===0 || (n!==1 &&tabPions[cooy][coox]===autre) ) && (coox+modx>-1 && coox+modx<8) && (cooy+mody>-1 && cooy+mody<8) && tabPions[cooy+mody][coox+modx]===autre){
         return exploration(coox+modx,cooy+mody,modx,mody,actif,autre,n+1);
     }
-    if(n!=1 && (coox+modx>-1 && coox+modx<8) && (cooy+mody>-1 && cooy+mody<8) && tabPions[cooy+mody][coox+modx]===actif){
-        return true;
-    }else{return false;}
-
+    return n !== 1 && (coox + modx > -1 && coox + modx < 8) && (cooy + mody > -1 && cooy + mody < 8) && tabPions[cooy + mody][coox + modx] === actif;
 }
 
 function mainExplo(actif,autre){
     tabExplo=[];
     for(let x=0;x<8;x++){
         for(let y=0;y<8;y++){
-            var ex1=exploration(x,y,0,1,actif,autre,1);//bas
-            var ex2=exploration(x,y,1,1,actif,autre,1);//bas+droite
-            var ex3=exploration(x,y,1,0,actif,autre,1);//droite
-            var ex4=exploration(x,y,1,-1,actif,autre,1);//haut+droite
-            var ex5=exploration(x,y,0,-1,actif,autre,1);//haut
-            var ex6=exploration(x,y,-1,-1,actif,autre,1);//haut+gauche
-            var ex7=exploration(x,y,-1,0,actif,autre,1);//gauche
-            var ex8=exploration(x,y,-1,1,actif,autre,1);//bas+gauche
-            if(ex1==true||ex2==true||ex3==true||ex4==true||ex5==true||ex6==true||ex7==true||ex8==true){
+            let ex1=exploration(x,y,0,1,actif,autre,1);//bas
+            let ex2=exploration(x,y,1,1,actif,autre,1);//bas+droite
+            let ex3=exploration(x,y,1,0,actif,autre,1);//droite
+            let ex4=exploration(x,y,1,-1,actif,autre,1);//haut+droite
+            let ex5=exploration(x,y,0,-1,actif,autre,1);//haut
+            let ex6=exploration(x,y,-1,-1,actif,autre,1);//haut+gauche
+            let ex7=exploration(x,y,-1,0,actif,autre,1);//gauche
+            let ex8=exploration(x,y,-1,1,actif,autre,1);//bas+gauche
+            if(ex1===true||ex2===true||ex3===true||ex4===true||ex5===true||ex6===true||ex7===true||ex8===true){
                 tabExplo.push([x,y]);
             }
         }
@@ -91,15 +89,13 @@ function mainExplo(actif,autre){
 
 function changeCoul(coox,cooy,modx,mody,actif,autre,n){
     if((coox+modx>-1 && coox+modx<8) && (cooy+mody>-1 && cooy+mody<8) && tabPions[cooy+mody][coox+modx]===autre){
-        var temp = changeCoul(coox+modx,cooy+mody,modx,mody,actif,autre,n+1);
+        let temp = changeCoul(coox+modx,cooy+mody,modx,mody,actif,autre,n+1);
         if(temp){
             tabChang.push([coox+modx,cooy+mody]);
             return true;
         }
     }
-    if(n!=1 && (coox+modx>-1 && coox+modx<8) && (cooy+mody>-1 && cooy+mody<8) && tabPions[cooy+mody][coox+modx]===actif){
-        return true;
-    }else{return false;}
+    return n !== 1 && (coox + modx > -1 && coox + modx < 8) && (cooy + mody > -1 && cooy + mody < 8) && tabPions[cooy + mody][coox + modx] === actif;
 }
 
 
@@ -137,6 +133,17 @@ function highlight(actif, autre){
     }
 }
 
+function testFin(){
+    comptePions();
+    if((pionVide===0)||(compteN===0)||(compteB===0)){
+        if(compteN>compteB){
+            ("Les noirs gagnent la partie");}
+        if(compteN<compteB){alert("Les blancs gagnent la partie");}
+        if(compteN===compteB){alert("égalité");}
+
+    }
+}
+
 function tourOrdi() {
     mainExplo(1,2);
     let random = getRandomInt(tabExplo.length);
@@ -162,6 +169,9 @@ function comptePions(){
             }
             if(tabPions[j][i]===2){
                 compteN+=1;
+            }
+            if(tabPions[j][i]===0){
+                pionVide+=1;
             }
         }
     }
@@ -218,7 +228,9 @@ $("#canvas").click(function(e){
             mainChangeCoul(2,1);
             dessinePion();
             comptePions();
+            testFin();
             tourOrdi();
+            testFin();
             comptePions();
             highlight(2,1);
 
