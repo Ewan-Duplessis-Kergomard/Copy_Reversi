@@ -135,12 +135,18 @@ function highlight(actif, autre){
 
 function testFin(){
     comptePions();
-    if((pionVide===0)||(compteN===0)||(compteB===0)){
-        if(compteN>compteB){
-            ("Les noirs gagnent la partie");}
-        if(compteN<compteB){alert("Les blancs gagnent la partie");}
-        if(compteN===compteB){alert("égalité");}
-
+    mainExplo(2,1);
+    let explo1 = tabExplo;
+    mainExplo(1,2);
+    let explo2 = tabExplo;
+    if ((explo1.length === 0) && (explo2.length===0)){
+        if(compteN>compteB){alert("Les noirs gagnent la partie1");}
+        if(compteN<compteB){alert("Les blancs gagnent la partie2");}
+        if(compteN===compteB){alert("égalité3");}
+    }else if((pionVide===0)||(compteN===0)||(compteB===0)){
+        if(compteN>compteB){alert("Les noirs gagnent la partie4");}
+        if(compteN<compteB){alert("Les blancs gagnent la partie5");}
+        if(compteN===compteB){alert("égalité6");}
     }
 }
 
@@ -152,6 +158,9 @@ function tourOrdi() {
     tabPions[row][col] = 1;
     mainChangeCoul(1,2);
     dessinePion();
+    setTimeout(function (){testFin()}, 500);
+    highlight(2,1);
+    if(tabExplo.length===0){setTimeout(function(){tourOrdi()},250);}
 }
 
 function game() {
@@ -162,6 +171,7 @@ function game() {
 function comptePions(){
     compteB=0;
     compteN=0;
+    pionVide=0;
     for (let j=0;j<8;j++){
         for(let i=0;i<8;i++){
             if(tabPions[j][i]===1){
@@ -227,15 +237,11 @@ $("#canvas").click(function(e){
             tabPions[row][col] = 2;
             mainChangeCoul(2,1);
             dessinePion();
-            comptePions();
             testFin();
-            tourOrdi();
-            testFin();
-            comptePions();
-            highlight(2,1);
-
+            setTimeout(function (){tourOrdi()}, 250);
+            //tourOrdi();
         }
     }
-    //setTimeout(fonctionAExecuter, 2000);
+
 
 });
