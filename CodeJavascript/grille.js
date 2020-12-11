@@ -123,6 +123,51 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
+function minMax(depth){
+    mainExplo(1,2);
+    let random = getRandomInt(tabExplo.length);
+    let bestScore;
+    let bestMove = tabExplo[random];
+    let score;
+    if ((testFin) || (depth === 0)) {
+        return bestMove;
+    }
+    if (depth%2===0) { //=Programme
+        mainExplo(1,2);
+        bestScore = -1000;
+        score=compteB;
+        for (let i=0; i<tabExplo.length; i++) {
+            let col = tabExplo[i][0];
+            let row = tabExplo[i][1];
+            tabPions[row][col] = 1;
+            comptePions();
+            score = minMax(depth - 1)
+            tabPions[row][col] = 0;
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = tabExplo[i] ;
+            }
+        }
+    } else { //type MIN = adversaire
+        mainExplo(2,1);
+        bestScore = 1000;
+        for (let i=0; i<tabExplo.length; i++) {
+            let col = tabExplo[i][0];
+            let row = tabExplo[i][1];
+            tabPions[row][col] = 2;
+            comptePions();
+            score = minMax(depth - 1)
+            tabPions[row][col] = 1;
+            if (score < bestScore) {
+                bestScore = score;
+                bestMove = tabExplo[i];
+            }
+        }
+    }
+    return bestscore ;
+}
+
+
 function highlight(actif, autre){
     mainExplo(actif, autre);
     for (let i = 0 ; i < tabExplo.length ; i++) {
@@ -143,11 +188,13 @@ function testFin(){
         if(compteN>compteB){alert("Les noirs gagnent la partie1");}
         if(compteN<compteB){alert("Les blancs gagnent la partie2");}
         if(compteN===compteB){alert("égalité3");}
-    }else if((pionVide===0)||(compteN===0)||(compteB===0)){
+        return true;}
+    else if((pionVide===0)||(compteN===0)||(compteB===0)){
         if(compteN>compteB){alert("Les noirs gagnent la partie4");}
         if(compteN<compteB){alert("Les blancs gagnent la partie5");}
         if(compteN===compteB){alert("égalité6");}
-    }
+        return true;}
+    return false;
 }
 
 function tourOrdi() {
@@ -163,6 +210,17 @@ function tourOrdi() {
     if(tabExplo.length===0){setTimeout(function(){tourOrdi()},250);}
 }
 
+function tourOrdi2(depth){
+    mainExplo(1,2);
+    let coupAJouer = MinMax(depth);
+    x= coupAJouer[0][0];
+    y= coupAJouer[0][1];
+    tabPions[x][y]=1;
+    mainChangeCoul(1,2);
+    dessinePion();
+    setTimeout(function (){testFin()}, 500);
+    highlight(2,1);
+}
 function game() {
     dessineG();
     dessinePion();
@@ -238,7 +296,7 @@ $("#canvas").click(function(e){
             mainChangeCoul(2,1);
             dessinePion();
             testFin();
-            setTimeout(function (){tourOrdi()}, 250);
+            setTimeout(function (){tourOrdi2(3)}, 250);
             //tourOrdi();
         }
     }
