@@ -139,10 +139,12 @@ function minMax(depth){
         for (let i=0; i<tabExplo.length; i++) {
             let col = tabExplo[i][0];
             let row = tabExplo[i][1];
+            let temp = deepcopy(tabPions);
             tabPions[row][col] = 1;
+            mainChangeCoul(1,2);
             comptePions();
             score = minMax(depth - 1)
-            tabPions[row][col] = 0;
+            tabPions = deepcopy(temp);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = tabExplo[i] ;
@@ -154,10 +156,13 @@ function minMax(depth){
         for (let i=0; i<tabExplo.length; i++) {
             let col = tabExplo[i][0];
             let row = tabExplo[i][1];
+            let temp = deepcopy(tabPions);
             tabPions[row][col] = 2;
+            mainChangeCoul(2,1);
             comptePions();
             score = minMax(depth - 1)
             tabPions[row][col] = 1;
+            tabPions = deepcopy(temp);
             if (score < bestScore) {
                 bestScore = score;
                 bestMove = tabExplo[i];
@@ -243,6 +248,25 @@ function comptePions(){
             }
         }
     }
+}
+
+function deepcopy(t1){
+    let temp=[[0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]];
+
+    for (let i = 0; i < t1.length; i++) {
+        for (let j = 0; j <t1[0].length ; j++) {
+            temp[i][j]=t1[i][j];
+        }
+
+    }
+    return temp;
 }
 
 
