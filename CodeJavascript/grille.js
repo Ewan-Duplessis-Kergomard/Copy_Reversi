@@ -3,38 +3,32 @@ const grille = canvas.getContext('2d');
 const tX = canvas.getAttribute('width');
 const tY = canvas.getAttribute('height');
 let tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 1, 2, 0, 0, 0],
-                [0, 0, 0, 2, 1, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0]];
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]];
 const largeurGrille = 400;
 const c = largeurGrille/8;
 let col, row;
 let compteN,compteB,pionVide;
-
-
 let tabExplo = [];
-
 function dessineG(){                                //fonction qui trace le plateau
     grille.fillStyle = "rgb(0,128,0)";
     grille.fillRect (0, 0, largeurGrille, largeurGrille);
     grille.strokeStyle="#000000";
     grille.lineWidth = 4;
     grille.beginPath();
-
     for (let n = 1; n < 8; n++) {                       // et la grille
         grille.moveTo(n*c, 0);
         grille.lineTo(n*c, 400);
         grille.moveTo(400, n*c);
         grille.lineTo(0, n*c);
-
     }
     grille.stroke();
 }
-
 function dessinePion(){
     for (let py = 0; py < 8; py++) {
         for(let px = 0; px < 8; px++) {                             // on parcoure le tableau de jeu
@@ -59,15 +53,12 @@ function dessinePion(){
         }
     }
 }
-
-
 function exploration(coox,cooy,modx,mody,actif,autre,n){
     if((tabPions[cooy][coox]===0 || (n!==1 &&tabPions[cooy][coox]===autre) ) && (coox+modx>-1 && coox+modx<8) && (cooy+mody>-1 && cooy+mody<8) && tabPions[cooy+mody][coox+modx]===autre){
         return exploration(coox+modx,cooy+mody,modx,mody,actif,autre,n+1);
     }
     return n !== 1 && (coox + modx > -1 && coox + modx < 8) && (cooy + mody > -1 && cooy + mody < 8) && tabPions[cooy + mody][coox + modx] === actif;
 }
-
 function mainExplo(actif,autre){
     tabExplo=[];
     for(let x=0;x<8;x++){
@@ -86,7 +77,6 @@ function mainExplo(actif,autre){
         }
     }
 }
-
 function changeCoul(coox,cooy,modx,mody,actif,autre,n){
     if((coox+modx>-1 && coox+modx<8) && (cooy+mody>-1 && cooy+mody<8) && tabPions[cooy+mody][coox+modx]===autre){
         let temp = changeCoul(coox+modx,cooy+mody,modx,mody,actif,autre,n+1);
@@ -97,8 +87,6 @@ function changeCoul(coox,cooy,modx,mody,actif,autre,n){
     }
     return n !== 1 && (coox + modx > -1 && coox + modx < 8) && (cooy + mody > -1 && cooy + mody < 8) && tabPions[cooy + mody][coox + modx] === actif;
 }
-
-
 function mainChangeCoul(actif,autre){
     tabChang=[];
     changeCoul(col,row,0,1,actif,autre,1);
@@ -109,7 +97,6 @@ function mainChangeCoul(actif,autre){
     changeCoul(col,row,-1,-1,actif,autre,1);
     changeCoul(col,row,-1,0,actif,autre,1);
     changeCoul(col,row,-1,1,actif,autre,1);
-
     for(let i=0;i<tabChang.length;i++){
         var x=tabChang[i][0];
         var y=tabChang[i][1];
@@ -118,61 +105,54 @@ function mainChangeCoul(actif,autre){
         //compte actif +1
     }
 }
-
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
-
 function minMax(depth){
-    mainExplo(1,2);
-    let random = getRandomInt(tabExplo.length);
-    let bestScore;
-    let bestMove = tabExplo[random];
-    let score;
-    if ((testFin) || (depth === 0)) {
-        return bestMove;
+    if ((testFin===true) || (depth === 0)) {
+        comptePions();
+        return compteB;
     }
-    if (depth%2===0) { //=Programme
+
+    let bestScore;
+    let bestMove;// = tabExplo[getRandomInt(tabExplo.length)];
+
+    if (depth%2!==0) { //type Max = programme
+        bestScore=-1000;                                //score = - infini
         mainExplo(1,2);
-        bestScore = -1000;
-        score=compteB;
-        for (let i=0; i<tabExplo.length; i++) {
-            let col = tabExplo[i][0];
-            let row = tabExplo[i][1];
+        for (let m=0; m<tabExplo.length; m++) {         // pour chaque move possible
+            col = tabExplo[m][0];
+            row = tabExplo[m][1];
             let temp = deepcopy(tabPions);
-            tabPions[row][col] = 1;
+            tabPions[row][col] = 1;                     // on fait le move m
             mainChangeCoul(1,2);
             comptePions();
-            score = minMax(depth - 1)
-            tabPions = deepcopy(temp);
+            let score = minMax(depth - 1);
+            tabPions = temp;                  // on defait le move m
             if (score > bestScore) {
                 bestScore = score;
-                bestMove = tabExplo[i] ;
+                bestMove = tabExplo[m];                 // m devient le meilleur move si son score > tous
             }
         }
     } else { //type MIN = adversaire
+        bestScore=1000;
         mainExplo(2,1);
-        bestScore = 1000;
-        for (let i=0; i<tabExplo.length; i++) {
-            let col = tabExplo[i][0];
-            let row = tabExplo[i][1];
+        for (let m=0; m<tabExplo.length; m++) {         // pour chaque coup possible
+            col = tabExplo[m][0];
+            row = tabExplo[m][1];
             let temp = deepcopy(tabPions);
-            tabPions[row][col] = 2;
+            tabPions[row][col] = 2;                     // on fait le move m
             mainChangeCoul(2,1);
-            comptePions();
-            score = minMax(depth - 1)
-            tabPions[row][col] = 1;
-            tabPions = deepcopy(temp);
+            let score = minMax(depth - 1)
+            tabPions = temp;
             if (score < bestScore) {
                 bestScore = score;
-                bestMove = tabExplo[i];
+                bestMove = tabExplo[m];
             }
         }
     }
-    return bestscore ;
+    return bestScore ;
 }
-
-
 function highlight(actif, autre){
     mainExplo(actif, autre);
     for (let i = 0 ; i < tabExplo.length ; i++) {
@@ -182,7 +162,6 @@ function highlight(actif, autre){
         grille.fill();
     }
 }
-
 function testFin(){
     comptePions();
     mainExplo(2,1);
@@ -201,7 +180,6 @@ function testFin(){
         return true;}
     return false;
 }
-
 function tourOrdi() {
     mainExplo(1,2);
     let random = getRandomInt(tabExplo.length);
@@ -214,13 +192,12 @@ function tourOrdi() {
     highlight(2,1);
     if(tabExplo.length===0){setTimeout(function(){tourOrdi()},250);}
 }
-
 function tourOrdi2(depth){
     mainExplo(1,2);
-    let coupAJouer = MinMax(depth);
-    x= coupAJouer[0][0];
-    y= coupAJouer[0][1];
-    tabPions[x][y]=1;
+    let coupAJouer = minMax(depth);
+    col= coupAJouer[0];
+    row= coupAJouer[1];
+    tabPions[row][col]=1;
     mainChangeCoul(1,2);
     dessinePion();
     setTimeout(function (){testFin()}, 500);
@@ -230,7 +207,6 @@ function game() {
     dessineG();
     dessinePion();
 }
-
 function comptePions(){
     compteB=0;
     compteN=0;
@@ -275,7 +251,6 @@ highlight(2,1);
 $("#canvas").click(function(e){
     let x = e.pageX - this.offsetLeft;
     let y = e.pageY - this.offsetTop
-
     if(x < c) {
         col = 0; }
     else if(x < 2*c) {
@@ -294,7 +269,6 @@ $("#canvas").click(function(e){
         col = 7; }
     else {
         col = 8; }
-
     if(y < c) {
         row = 0; }
     else if(y < 2*c) {
@@ -320,10 +294,8 @@ $("#canvas").click(function(e){
             mainChangeCoul(2,1);
             dessinePion();
             testFin();
-            setTimeout(function (){tourOrdi2(3)}, 250);
+            setTimeout(function (){tourOrdi2(3)}, 500);
             //tourOrdi();
         }
     }
-
-
 });
