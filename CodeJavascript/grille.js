@@ -13,6 +13,7 @@ let tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
 const largeurGrille = 400;
 const c = largeurGrille/8;
 let col, row;
+let moveAfaire;
 let compteN,compteB,pionVide;
 let tabExplo = [];
 function dessineG(){                                //fonction qui trace le plateau
@@ -108,51 +109,104 @@ function mainChangeCoul(actif,autre){
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
-function minMax(depth){
+function minMaxPair(depth){
     if ((testFin===true) || (depth === 0)) {
         comptePions();
         return compteB;
     }
 
     let bestScore;
-    let bestMove;// = tabExplo[getRandomInt(tabExplo.length)];
+    let bestMove = [];// = tabExplo[getRandomInt(tabExplo.length)];
 
-    if (depth%2!==0) { //type Max = programme
+    if (depth%2===0) { //type Max = programme
         bestScore=-1000;                                //score = - infini
         mainExplo(1,2);
-        for (let m=0; m<tabExplo.length; m++) {         // pour chaque move possible
-            col = tabExplo[m][0];
-            row = tabExplo[m][1];
+        let copie1 = tabExplo;
+        for (let m=0; m<copie1.length; m++) {         // pour chaque move possible
+            col = copie1[m][0];
+            row = copie1[m][1];
             let temp = deepcopy(tabPions);
             tabPions[row][col] = 1;                     // on fait le move m
             mainChangeCoul(1,2);
             comptePions();
-            let score = minMax(depth - 1);
+            let score = minMaxPair(depth - 1);
             tabPions = temp;                  // on defait le move m
             if (score > bestScore) {
                 bestScore = score;
-                bestMove = tabExplo[m];                 // m devient le meilleur move si son score > tous
+                bestMove = copie1[m];                 // m devient le meilleur move si son score > tous
             }
         }
     } else { //type MIN = adversaire
         bestScore=1000;
         mainExplo(2,1);
-        for (let m=0; m<tabExplo.length; m++) {         // pour chaque coup possible
-            col = tabExplo[m][0];
-            row = tabExplo[m][1];
+        let copie2 = tabExplo;
+        for (let m=0; m<copie2.length; m++) {         // pour chaque coup possible
+            col = copie2[m][0];
+            row = copie2[m][1];
             let temp = deepcopy(tabPions);
             tabPions[row][col] = 2;                     // on fait le move m
             mainChangeCoul(2,1);
-            let score = minMax(depth - 1)
+            let score = minMaxPair(depth - 1)
             tabPions = temp;
             if (score < bestScore) {
                 bestScore = score;
-                bestMove = tabExplo[m];
+                bestMove = copie2[m];
             }
         }
     }
+    if (depth !== 0){moveAfaire=bestMove;}
     return bestScore ;
 }
+
+function minMaxImpair(depth){
+    if ((testFin===true) || (depth === 0)) {
+        comptePions();
+        return compteB;
+    }
+
+    let bestScore;
+    let bestMove = [];// = tabExplo[getRandomInt(tabExplo.length)];
+
+    if (depth%2!==0) { //type Max = programme
+        bestScore=-1000;                                //score = - infini
+        mainExplo(1,2);
+        let copie1 = tabExplo;
+        for (let m=0; m<copie1.length; m++) {         // pour chaque move possible
+            col = copie1[m][0];
+            row = copie1[m][1];
+            let temp = deepcopy(tabPions);
+            tabPions[row][col] = 1;                     // on fait le move m
+            mainChangeCoul(1,2);
+            comptePions();
+            let score = minMaxImpair(depth - 1);
+            tabPions = temp;                  // on defait le move m
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = copie1[m];                 // m devient le meilleur move si son score > tous
+            }
+        }
+    } else { //type MIN = adversaire
+        bestScore=1000;
+        mainExplo(2,1);
+        let copie2 = tabExplo;
+        for (let m=0; m<copie2.length; m++) {         // pour chaque coup possible
+            col = copie2[m][0];
+            row = copie2[m][1];
+            let temp = deepcopy(tabPions);
+            tabPions[row][col] = 2;                     // on fait le move m
+            mainChangeCoul(2,1);
+            let score = minMaxImpair(depth - 1)
+            tabPions = temp;
+            if (score < bestScore) {
+                bestScore = score;
+                bestMove = copie2[m];
+            }
+        }
+    }
+    if (depth !== 0){moveAfaire=bestMove;}
+    return bestScore ;
+}
+
 function highlight(actif, autre){
     mainExplo(actif, autre);
     for (let i = 0 ; i < tabExplo.length ; i++) {
@@ -194,10 +248,14 @@ function tourOrdi() {
 }
 function tourOrdi2(depth){
     mainExplo(1,2);
-    let coupAJouer = minMax(depth);
-    col= coupAJouer[0];
-    row= coupAJouer[1];
-    tabPions[row][col]=1;
+    if (depth%2===0){
+        let coupAJouer = minMaxPair(depth);
+    }else{
+        let coupAJouer = minMaxImpair(depth);
+    }
+    col= moveAfaire[0];// coupAJouer[0];
+    row= moveAfaire[1];//coupAJouer[1];
+    tabPions[row][col] = 1;
     mainChangeCoul(1,2);
     dessinePion();
     setTimeout(function (){testFin()}, 500);
