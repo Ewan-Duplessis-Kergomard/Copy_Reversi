@@ -249,9 +249,9 @@ function tourOrdi() {
 function tourOrdi2(depth){
     mainExplo(1,2);
     if (depth%2===0){                           // en fonction de la profondeur on utilise pas le meme minmax
-        let coupAJouer = minMaxPair(depth);     // les deux minMax font exactement la meme chose sauf que le noeud de
+        minMaxPair(depth);     // les deux minMax font exactement la meme chose sauf que le noeud de
     }else{                                      // depart change en fonction de si la profondeur est pair ou impair
-        let coupAJouer = minMaxImpair(depth);   //  pair --> depth%2 === 2    ou  impair --> depth%2 !== 2
+        minMaxImpair(depth);   //  pair --> depth%2 === 2    ou  impair --> depth%2 !== 2
     }
     col= moveAfaire[0];// coupAJouer[0];
     row= moveAfaire[1];//coupAJouer[1];
@@ -352,7 +352,7 @@ $("#canvas").click(function(e){
             mainChangeCoul(2,1);
             dessinePion();
             testFin();
-            setTimeout(function (){tourOrdi2(3)}, 500);
+            setTimeout(function (){tourOrdi2(2)}, 500);
             //tourOrdi();
         }
     }
