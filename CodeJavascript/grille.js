@@ -2,6 +2,7 @@ const canvas  = document.getElementById("canvas");
 const grille = canvas.getContext('2d');
 const tX = canvas.getAttribute('width');
 const tY = canvas.getAttribute('height');
+let niveauIA = 1;
 let tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -16,6 +17,9 @@ let col, row;
 let moveAfaire;
 let compteN,compteB,pionVide;
 let tabExplo = [];
+function donnerNiveauIA(x){
+    niveauIA=x;
+}
 function dessineG(){                                //fonction qui trace le plateau
     grille.fillStyle = "rgb(0,128,0)";
     grille.fillRect (0, 0, largeurGrille, largeurGrille);
@@ -157,7 +161,6 @@ function minMaxPair(depth){
     if (depth !== 0){moveAfaire=bestMove;}
     return bestScore ;
 }
-
 function minMaxImpair(depth){
     if ((testFin===true) || (depth === 0)) {
         comptePions();
@@ -206,7 +209,6 @@ function minMaxImpair(depth){
     if (depth !== 0){moveAfaire=bestMove;}
     return bestScore ;
 }
-
 function highlight(actif, autre){
     mainExplo(actif, autre);
     for (let i = 0 ; i < tabExplo.length ; i++) {
@@ -248,16 +250,18 @@ function tourOrdi() {
 }
 function tourOrdi2(depth){
     mainExplo(1,2);
-    if (depth%2===0){                           // en fonction de la profondeur on utilise pas le meme minmax
-        minMaxPair(depth);     // les deux minMax font exactement la meme chose sauf que le noeud de
-    }else{                                      // depart change en fonction de si la profondeur est pair ou impair
-        minMaxImpair(depth);   //  pair --> depth%2 === 2    ou  impair --> depth%2 !== 2
+    if (tabExplo.length!==0){
+        if (depth%2===0){                           // en fonction de la profondeur on utilise pas le meme minmax
+            minMaxPair(depth);                      // les deux minMax font exactement la meme chose sauf que le noeud de
+        }else{                                      // depart change en fonction de si la profondeur est pair ou impair
+            minMaxImpair(depth);                    //  pair --> depth%2 === 2    ou  impair --> depth%2 !== 2
+        }
+        col= moveAfaire[0];// coupAJouer[0];
+        row= moveAfaire[1];//coupAJouer[1];
+        tabPions[row][col] = 1;
+        mainChangeCoul(1,2);
+        dessinePion();
     }
-    col= moveAfaire[0];// coupAJouer[0];
-    row= moveAfaire[1];//coupAJouer[1];
-    tabPions[row][col] = 1;
-    mainChangeCoul(1,2);
-    dessinePion();
     setTimeout(function (){testFin()}, 500);
     highlight(2,1);
 }
@@ -283,7 +287,6 @@ function comptePions(){
         }
     }
 }
-
 function deepcopy(t1){
     let temp=[[0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -352,7 +355,7 @@ $("#canvas").click(function(e){
             mainChangeCoul(2,1);
             dessinePion();
             testFin();
-            setTimeout(function (){tourOrdi2(2)}, 500);
+            setTimeout(function (){tourOrdi2(niveauIA)}, 500);
             //tourOrdi();
         }
     }
