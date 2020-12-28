@@ -20,6 +20,30 @@ let tabExplo = [];
 function donnerNiveauIA(x){
     niveauIA=x;
 }
+function afficherRegle(){
+    if ( confirm(   "Le plateau de jeu represente un damier de 64 cases, chaque joueur" +
+                    "dispose  de 32 jetons chacun, chaque face est noire d'un cote, " +
+                    "blanche de l'autre." +
+                    "Vous prenez les jetons en les retournant du cote de votre couleur." +
+                    "Au depart, 2 pions de chaque couleur sont disposes sur les 4 cases " +
+                    "centrales. A tour de role, chacun pose un jeton avec l'obligation " +
+                    "de retourner au moins un jeton adverse. Votre jeton doit etre pose " +
+                    "de maniere a entourer 1 ou plusieurs jetons adverses." +
+                    "Un jeton peut prendre simultanement dans les direction horizontales, " +
+                    "veritcales et diagonales." +
+                    "La partie se termine quand tous le jetons sont poses, ou si aucun " +
+                    "joueur ne peut plus jouer." +
+                    "Le vainqueur est celui qui possede le plus de jetons de sa couleur " +
+                    "sur le plateau." +
+                    "Comment jouer :" +
+                    "Pour poser un pion, cliquez sur la cases de votre choix." +
+                    "Si vous ne pouvez pas jouer, cliquez sur le bouton 'Passe'." +
+                    "Si vous aimez la difficulte, selectionner un niveau de difficulte superieur." )) {
+
+    } else {
+        // Code à éxécuter si l'utilisateur clique sur "Annuler"
+    }
+}
 function dessineG(){                                //fonction qui trace le plateau
     grille.fillStyle = "rgb(0,128,0)";
     grille.fillRect (0, 0, largeurGrille, largeurGrille);
@@ -306,7 +330,9 @@ function deepcopy(t1){
     return temp;
 }
 
+function jouer(){
 
+}
 game();
 highlight(2,1);
 $("#canvas").click(function(e){
