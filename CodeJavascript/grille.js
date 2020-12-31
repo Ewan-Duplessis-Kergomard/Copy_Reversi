@@ -6,8 +6,8 @@ let niveauIA = 1;
 let tabPions = [[0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]];
@@ -156,7 +156,6 @@ function minMaxPair(depth){
             let temp = deepcopy(tabPions);
             tabPions[row][col] = 1;                     // on fait le move m
             mainChangeCoul(1,2);
-            comptePions();
             let score = minMaxPair(depth - 1);
             tabPions = temp;                  // on defait le move m
             if (score > bestScore) {
@@ -329,12 +328,30 @@ function deepcopy(t1){
     }
     return temp;
 }
-
-function jouer(){
-
+function masquerDiv(){
+    var container_Elt = document.getElementById('avantDebut');
+    container_Elt.classList.add("le_div_masque");
+    container_Elt.classList.remove("le_div_visible");
+    var container_Elt = document.getElementById('apresDebut');
+    container_Elt.classList.remove("le_div_masque");
+    container_Elt.classList.add("le_div_visible");
 }
-game();
-highlight(2,1);
+function jouer(){
+    //avantDebut.style.display = 'none';
+    //apresDebut.style.display = 'block';
+    dessineG();
+    tabPions =[ [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 2, 0, 0, 0],
+                [0, 0, 0, 2, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0] ];
+    dessinePion();
+    highlight(2,1);
+}
+//game();
 $("#canvas").click(function(e){
     let x = e.pageX - this.offsetLeft;
     let y = e.pageY - this.offsetTop
@@ -382,7 +399,6 @@ $("#canvas").click(function(e){
             dessinePion();
             testFin();
             setTimeout(function (){tourOrdi2(niveauIA)}, 500);
-            //tourOrdi();
         }
     }
 });
